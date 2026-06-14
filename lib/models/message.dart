@@ -12,5 +12,20 @@ class Message {
   final String senderId;
   final DateTime sentAt;
   final bool isMine;
-}
 
+  factory Message.fromJson(Map<String, dynamic> json) {
+    final sentAtValue =
+        json['sentAt'] ?? json['dataEnvio'] ?? json['createdAt'] ?? json['timestamp'];
+    return Message(
+      id: '${json['id'] ?? ''}',
+      content:
+          '${json['content'] ?? json['conteudo'] ?? json['message'] ?? json['text'] ?? ''}',
+      senderId:
+          '${json['senderId'] ?? json['remetenteId'] ?? json['userId'] ?? json['sender']?['id'] ?? ''}',
+      sentAt: DateTime.tryParse('$sentAtValue') ?? DateTime.now(),
+      isMine: json['isMine'] == true ||
+          json['mine'] == true ||
+          json['fromCurrentUser'] == true,
+    );
+  }
+}

@@ -12,7 +12,7 @@ class MessageBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final alignment = message.isMine ? Alignment.centerRight : Alignment.centerLeft;
-    final background = message.isMine ? AppColors.primary : Colors.grey.shade200;
+    final background = message.isMine ? AppColors.primary : AppColors.surfaceTint;
     final foreground = message.isMine ? Colors.white : AppColors.text;
     return Align(
       alignment: alignment,
@@ -31,7 +31,7 @@ class MessageBubble extends StatelessWidget {
             const SizedBox(height: 6),
             Text(
               DateFormat('HH:mm').format(message.sentAt),
-              style: TextStyle(color: foreground.withOpacity(0.7), fontSize: 12),
+              style: TextStyle(color: foreground.withValues(alpha: 0.7), fontSize: 12),
             ),
           ],
         ),

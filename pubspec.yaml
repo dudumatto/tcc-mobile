@@ -1,5 +1,5 @@
 name: tcc_mobile
-description: TCC mobile app in Flutter.
+description: CollabResearch app in Flutter.
 publish_to: "none"
 
 version: 1.0.0+1
@@ -17,7 +17,7 @@ dependencies:
   flutter_secure_storage: ^9.0.0
   stomp_dart_client: ^1.0.0
   google_fonts: ^6.1.0
-  lucide_icons: ^1.0.0
+  lucide_icons: ^0.257.0
   cached_network_image: ^3.3.0
   fl_chart: ^0.68.0
   flutter_form_builder: ^9.2.0
@@ -35,4 +35,3 @@ flutter:
   uses-material-design: true
   assets:
     - .env
-

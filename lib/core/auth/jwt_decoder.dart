@@ -4,7 +4,7 @@ class JwtDecoder {
   static Map<String, dynamic> decodePayload(String token) {
     final parts = token.split('.');
     if (parts.length != 3) {
-      throw FormatException('JWT invalido');
+      throw const FormatException('JWT invalido');
     }
     final payload = _decodeBase64(parts[1]);
     final decoded = jsonDecode(payload);
@@ -30,9 +30,15 @@ class JwtDecoder {
   }
 
   static bool isExpired(String token) {
-    final expiration = expirationFromToken(token);
-    if (expiration == null) return false;
-    return DateTime.now().isAfter(expiration);
+    try {
+      final expiration = expirationFromToken(token);
+      if (expiration == null) return false;
+      return DateTime.now().isAfter(expiration);
+    } on FormatException {
+      return true;
+    } catch (_) {
+      return true;
+    }
   }
 
   static String _decodeBase64(String input) {
@@ -40,4 +46,3 @@ class JwtDecoder {
     return utf8.decode(base64Url.decode(normalized));
   }
 }
-

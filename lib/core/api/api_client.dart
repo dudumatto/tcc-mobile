@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 
@@ -16,18 +17,25 @@ class ApiClient {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-          final token = await _storage.read(key: _tokenKey);
+          final token = _cachedToken ?? await _storage.read(key: _tokenKey);
+          _cachedToken = token;
           if (token != null && token.isNotEmpty) {
             options.headers['Authorization'] = 'Bearer $token';
           }
           handler.next(options);
         },
         onError: (error, handler) async {
+          if (kDebugMode) {
+            debugPrint(
+              'API ${error.requestOptions.method} ${error.requestOptions.uri} '
+              '-> ${error.response?.statusCode}: ${error.response?.data}',
+            );
+          }
           if (error.response?.statusCode == 401) {
             await clearToken();
-            final context = NavigationService.rootNavigatorKey.currentContext;
-            if (context != null) {
-              context.go('/login');
+            final navigatorState = NavigationService.rootNavigatorKey.currentState;
+            if (navigatorState != null && navigatorState.mounted) {
+              navigatorState.context.go('/login');
             }
             handler.reject(
               DioException(
@@ -49,14 +57,24 @@ class ApiClient {
   static const String _tokenKey = 'auth_token';
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
   late final Dio _dio;
+  String? _cachedToken;
 
   Dio get dio => _dio;
 
-  Future<void> saveToken(String token) => _storage.write(key: _tokenKey, value: token);
+  Future<void> saveToken(String token) async {
+    _cachedToken = token;
+    await _storage.write(key: _tokenKey, value: token);
+  }
 
-  Future<String?> readToken() => _storage.read(key: _tokenKey);
+  Future<String?> readToken() async {
+    _cachedToken ??= await _storage.read(key: _tokenKey);
+    return _cachedToken;
+  }
 
-  Future<void> clearToken() => _storage.delete(key: _tokenKey);
+  Future<void> clearToken() async {
+    _cachedToken = null;
+    await _storage.delete(key: _tokenKey);
+  }
 
   String friendlyError(DioException error) {
     final status = error.response?.statusCode;
@@ -74,4 +92,3 @@ class ApiClient {
     return 'Nao foi possivel concluir a operacao.';
   }
 }
-

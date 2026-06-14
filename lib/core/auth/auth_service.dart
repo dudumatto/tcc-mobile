@@ -23,5 +23,17 @@ class AuthService {
   Future<Response<dynamic>> me() {
     return _apiClient.dio.get(ApiEndpoints.me);
   }
-}
 
+  Future<Response<dynamic>> changePassword(Map<String, dynamic> body) {
+    return _apiClient.dio.put(ApiEndpoints.changePassword, data: body);
+  }
+
+  Future<Response<dynamic>> updateProfile(
+      String id, Map<String, dynamic> body) {
+    return _apiClient.dio.put(ApiEndpoints.user(id), data: body);
+  }
+
+  Future<Response<dynamic>> updatePreferences(Map<String, dynamic> body) {
+    return _apiClient.dio.put(ApiEndpoints.userPreferences(), data: body);
+  }
+}

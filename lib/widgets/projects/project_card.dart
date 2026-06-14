@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../core/theme/app_colors.dart';
+import '../../core/utils/project_status.dart';
 import '../../models/project.dart';
 import '../common/app_card.dart';
 
@@ -10,22 +10,11 @@ class ProjectCard extends StatelessWidget {
   final Project project;
   final VoidCallback? onTap;
 
-  Color _statusColor(String status) {
-    final normalized = status.toLowerCase();
-    if (normalized.contains('ativo') || normalized.contains('andamento')) {
-      return AppColors.success;
-    }
-    if (normalized.contains('pend')) {
-      return AppColors.warning;
-    }
-    if (normalized.contains('rej') || normalized.contains('encerr')) {
-      return AppColors.danger;
-    }
-    return AppColors.primary;
-  }
-
   @override
   Widget build(BuildContext context) {
+    final statusLabel = formatProjectStatus(project.status);
+    final statusColor = projectStatusColor(project.status);
+
     return InkWell(
       onTap: onTap,
       child: AppCard(
@@ -40,7 +29,7 @@ class ProjectCard extends StatelessWidget {
               spacing: 8,
               runSpacing: 8,
               children: [
-                Chip(label: Text(project.status)),
+                Chip(label: Text(statusLabel)),
                 Chip(label: Text('${project.vacancies} vagas')),
                 Chip(label: Text('${project.collaborators} colaboradores')),
               ],
@@ -49,14 +38,15 @@ class ProjectCard extends StatelessWidget {
             Align(
               alignment: Alignment.centerLeft,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 decoration: BoxDecoration(
-                  color: _statusColor(project.status).withOpacity(0.12),
+                  color: statusColor.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(999),
                 ),
                 child: Text(
-                  project.status,
-                  style: TextStyle(color: _statusColor(project.status)),
+                  statusLabel,
+                  style: TextStyle(color: statusColor),
                 ),
               ),
             ),

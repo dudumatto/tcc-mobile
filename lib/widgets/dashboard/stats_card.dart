@@ -17,25 +17,40 @@ class StatsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppCard(
-      child: Row(
-        children: [
-          CircleAvatar(
-            child: Icon(icon),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title, style: Theme.of(context).textTheme.bodyMedium),
-                const SizedBox(height: 4),
-                Text(value, style: Theme.of(context).textTheme.titleLarge),
-              ],
+      padding: const EdgeInsets.all(14),
+      child: SizedBox(
+        height: 58,
+        child: Row(
+          children: [
+            CircleAvatar(
+              radius: 20,
+              child: Icon(icon, size: 20),
             ),
-          ),
-        ],
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    value,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
-

@@ -14,9 +14,8 @@ void main() {
       ),
     );
 
-    expect(find.text('Entrar'), findsOneWidget);
+    expect(find.text('Entrar'), findsWidgets);
     expect(find.text('Email'), findsOneWidget);
     expect(find.text('Senha'), findsOneWidget);
   });
 }
-

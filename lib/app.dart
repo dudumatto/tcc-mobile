@@ -13,7 +13,7 @@ class TccMobileApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final router = createAppRouter(authProvider);
     return MaterialApp.router(
-      title: 'TCC Mobile',
+      title: 'CollabResearch',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,

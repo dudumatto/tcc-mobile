@@ -9,7 +9,7 @@ class AuthRepository {
   final AuthService _service;
 
   Future<Response<dynamic>> login(String email, String password) {
-    return _service.login({'email': email, 'password': password});
+    return _service.login({'email': email, 'senha': password});
   }
 
   Future<Response<dynamic>> register(Map<String, dynamic> data) {
@@ -23,5 +23,29 @@ class AuthRepository {
   Future<Response<dynamic>> me() {
     return _service.me();
   }
-}
 
+  Future<Response<dynamic>> changePassword(
+    String currentPassword,
+    String newPassword,
+  ) {
+    return _service.changePassword({
+      'senhaAtual': currentPassword,
+      'novaSenha': newPassword,
+    });
+  }
+
+  Future<Response<dynamic>> updateProfile(
+      String id, Map<String, dynamic> data) {
+    return _service.updateProfile(id, data);
+  }
+
+  Future<Response<dynamic>> updatePreferences({
+    required bool notificationsEnabled,
+    required String theme,
+  }) {
+    return _service.updatePreferences({
+      'notificacoesAtivas': notificationsEnabled,
+      'tema': theme,
+    });
+  }
+}

@@ -15,7 +15,7 @@ class LandingScreen extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('TCC Mobile', style: Theme.of(context).textTheme.displaySmall),
+              Text('CollabResearch', style: Theme.of(context).textTheme.displaySmall),
               const SizedBox(height: 12),
               const Text('Versao mobile do app TCC.'),
               const SizedBox(height: 24),

@@ -9,5 +9,11 @@ class SubscriptionService {
   final Dio _dio;
 
   Future<Response<dynamic>> list() => _dio.get(ApiEndpoints.subscriptions);
-}
 
+  Future<void> create(String projectId) async {
+    await _dio.post<dynamic>(
+      ApiEndpoints.subscriptions,
+      data: {'projetoId': projectId},
+    );
+  }
+}

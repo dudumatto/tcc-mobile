@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../../core/utils/validators.dart';
+import '../../providers/project_provider.dart';
 import '../../widgets/common/app_button.dart';
 import '../../widgets/common/app_text_field.dart';
 
@@ -28,15 +31,38 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
     super.dispose();
   }
 
+  Future<void> _save() async {
+    if (!_formKey.currentState!.validate()) return;
+    final project = await context.read<ProjectProvider>().createProject({
+      'title': _titleController.text.trim(),
+      'description': _descriptionController.text.trim(),
+      'area': _area,
+      'course': _course,
+      'vacancies': int.tryParse(_vacanciesController.text.trim()) ?? 0,
+      'status': _status,
+    });
+    if (!mounted || project == null) return;
+    context.go('/projects/${project.id}');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Criar projeto')),
-      body: Form(
-        key: _formKey,
-        child: ListView(
-          padding: const EdgeInsets.all(24),
-          children: [
+      body: Consumer<ProjectProvider>(
+        builder: (context, provider, _) {
+          return Form(
+            key: _formKey,
+            child: ListView(
+              padding: const EdgeInsets.all(24),
+              children: [
+                if (provider.errorMessage != null) ...[
+                  Text(
+                    provider.errorMessage!,
+                    style: TextStyle(color: Theme.of(context).colorScheme.error),
+                  ),
+                  const SizedBox(height: 16),
+                ],
             AppTextField(
               label: 'Titulo',
               controller: _titleController,
@@ -51,7 +77,7 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<String>(
-              value: _area,
+              initialValue: _area,
               items: const [
                 DropdownMenuItem(value: 'Tecnologia', child: Text('Tecnologia')),
                 DropdownMenuItem(value: 'Educacao', child: Text('Educacao')),
@@ -62,7 +88,7 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<String>(
-              value: _course,
+              initialValue: _course,
               items: const [
                 DropdownMenuItem(value: 'ADS', child: Text('ADS')),
                 DropdownMenuItem(value: 'SI', child: Text('SI')),
@@ -80,7 +106,7 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<String>(
-              value: _status,
+              initialValue: _status,
               items: const [
                 DropdownMenuItem(value: 'Ativo', child: Text('Ativo')),
                 DropdownMenuItem(value: 'Em andamento', child: Text('Em andamento')),
@@ -92,14 +118,14 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
             const SizedBox(height: 24),
             AppButton(
               label: 'Salvar projeto',
-              onPressed: () {
-                if (!_formKey.currentState!.validate()) return;
-              },
+              isLoading: provider.isLoading,
+              onPressed: _save,
             ),
-          ],
-        ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
 }
-

@@ -1,6 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 
-import 'package:stomp_dart_client/stomp_dart_client.dart';
+import 'package:stomp_dart_client/stomp.dart';
+import 'package:stomp_dart_client/stomp_config.dart';
+import 'package:stomp_dart_client/stomp_frame.dart';
 
 class StompService {
   StompService({required this.wsUrl, required this.token});
@@ -29,7 +32,7 @@ class StompService {
     _client?.activate();
   }
 
-  void _onConnect(StompFrame frame) {
+  void _onConnect(StompFrame _) {
     _client?.subscribe(
       destination: '/user/queue/messages',
       callback: (frame) {
@@ -49,11 +52,16 @@ class StompService {
   }
 
   void sendMessage(Map<String, dynamic> payload) {
-    _client?.send(destination: '/app/chat.send', body: payload.toString());
+    _client?.send(destination: '/app/chat.send', body: jsonEncode(payload));
   }
 
   void disconnect() {
     _client?.deactivate();
   }
-}
 
+  void dispose() {
+    disconnect();
+    _messagesController.close();
+    _notificationsController.close();
+  }
+}
