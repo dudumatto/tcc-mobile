@@ -23,6 +23,24 @@ class AppTheme {
         backgroundColor: AppColors.background,
         foregroundColor: AppColors.text,
         centerTitle: false,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+      ),
+      navigationBarTheme: NavigationBarThemeData(
+        backgroundColor: AppColors.surface,
+        indicatorColor: AppColors.surfaceTint,
+        labelTextStyle: WidgetStateProperty.all(
+          const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+        ),
+      ),
+      navigationRailTheme: const NavigationRailThemeData(
+        backgroundColor: AppColors.surface,
+        indicatorColor: AppColors.surfaceTint,
+        selectedIconTheme: IconThemeData(color: AppColors.primary),
+        selectedLabelTextStyle: TextStyle(
+          color: AppColors.primary,
+          fontWeight: FontWeight.w700,
+        ),
       ),
       cardTheme: CardThemeData(
         color: AppColors.surface,
@@ -39,6 +57,14 @@ class AppTheme {
         labelStyle: const TextStyle(color: AppColors.text),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: AppColors.primaryDark,
+          side: const BorderSide(color: AppColors.border),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          minimumSize: const Size(0, 48),
+        ),
+      ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           backgroundColor: AppColors.primary,
@@ -46,6 +72,7 @@ class AppTheme {
           disabledBackgroundColor: AppColors.color1,
           disabledForegroundColor: AppColors.muted,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          minimumSize: const Size(0, 48),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(

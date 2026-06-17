@@ -64,40 +64,61 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     24,
                   ),
                   children: [
-                    Text(
-                      'Dashboard',
-                      style: Theme.of(context).textTheme.headlineMedium,
+                    Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 1180),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Dashboard',
+                              style: Theme.of(context).textTheme.headlineMedium,
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              'Resumo dos seus projetos, conversas e alertas.',
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                            const SizedBox(height: 18),
+                            _StatsGrid(
+                              children: [
+                                StatsCard(
+                                  title: 'Projetos',
+                                  value: '${projects.length}',
+                                ),
+                                StatsCard(
+                                  title: 'Progresso',
+                                  value: '$progress%',
+                                  icon: Icons.trending_up,
+                                ),
+                                StatsCard(
+                                  title: 'Nao lidas',
+                                  value:
+                                      '${notificationProvider.unreadCount}',
+                                ),
+                                StatsCard(
+                                  title: 'Atividades',
+                                  value: '${notifications.length}',
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+                            _DashboardContentGrid(
+                              children: [
+                                ActivityChart(
+                                  projects: projects.length,
+                                  conversations: inProgress,
+                                  notifications: notifications.length,
+                                ),
+                                RecentActivityList(
+                                  notifications: notifications,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                    const SizedBox(height: 16),
-                    _StatsGrid(
-                      children: [
-                        StatsCard(
-                          title: 'Projetos',
-                          value: '${projects.length}',
-                        ),
-                        StatsCard(
-                          title: 'Progresso',
-                          value: '$progress%',
-                          icon: Icons.trending_up,
-                        ),
-                        StatsCard(
-                          title: 'Nao lidas',
-                          value: '${notificationProvider.unreadCount}',
-                        ),
-                        StatsCard(
-                          title: 'Atividades',
-                          value: '${notifications.length}',
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    ActivityChart(
-                      projects: projects.length,
-                      conversations: inProgress,
-                      notifications: notifications.length,
-                    ),
-                    const SizedBox(height: 16),
-                    RecentActivityList(notifications: notifications),
                   ],
                 );
               },
@@ -119,7 +140,11 @@ class _StatsGrid extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         const spacing = 12.0;
-        final columns = constraints.maxWidth >= 520 ? 2 : 1;
+        final columns = constraints.maxWidth >= 920
+            ? 4
+            : constraints.maxWidth >= 560
+                ? 2
+                : 1;
         final itemWidth =
             (constraints.maxWidth - (spacing * (columns - 1))) / columns;
 
@@ -132,6 +157,39 @@ class _StatsGrid extends StatelessWidget {
                 width: itemWidth,
                 child: child,
               ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _DashboardContentGrid extends StatelessWidget {
+  const _DashboardContentGrid({required this.children});
+
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth < 860) {
+          return Column(
+            children: [
+              for (final child in children) ...[
+                child,
+                if (child != children.last) const SizedBox(height: 16),
+              ],
+            ],
+          );
+        }
+
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(child: children.first),
+            const SizedBox(width: 16),
+            Expanded(child: children.last),
           ],
         );
       },

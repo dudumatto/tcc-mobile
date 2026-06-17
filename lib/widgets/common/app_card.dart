@@ -9,6 +9,7 @@ class AppCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      clipBehavior: Clip.antiAlias,
       child: Padding(
         padding: padding ?? const EdgeInsets.all(16),
         child: child,
@@ -16,4 +17,3 @@ class AppCard extends StatelessWidget {
     );
   }
 }
-

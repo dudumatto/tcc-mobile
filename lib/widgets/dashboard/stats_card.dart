@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/theme/app_colors.dart';
 import '../common/app_card.dart';
 
 class StatsCard extends StatelessWidget {
@@ -17,14 +18,25 @@ class StatsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppCard(
-      padding: const EdgeInsets.all(14),
-      child: SizedBox(
-        height: 58,
+      padding: const EdgeInsets.all(16),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 74),
         child: Row(
           children: [
-            CircleAvatar(
-              radius: 20,
-              child: Icon(icon, size: 20),
+            DecoratedBox(
+              decoration: BoxDecoration(
+                color: AppColors.surfaceTint,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: SizedBox(
+                height: 44,
+                width: 44,
+                child: Icon(
+                  icon,
+                  size: 22,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
             ),
             const SizedBox(width: 12),
             Expanded(

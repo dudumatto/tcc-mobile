@@ -50,15 +50,21 @@ GoRouter createAppRouter(AuthProvider authProvider) {
     routes: [
       GoRoute(
         path: '/',
-        builder: (context, state) => const LandingScreen(),
+        pageBuilder: (context, state) => const NoTransitionPage(
+          child: LandingScreen(),
+        ),
       ),
       GoRoute(
         path: '/login',
-        builder: (context, state) => const LoginScreen(),
+        pageBuilder: (context, state) => const NoTransitionPage(
+          child: LoginScreen(),
+        ),
       ),
       GoRoute(
         path: '/register',
-        builder: (context, state) => const RegisterScreen(),
+        pageBuilder: (context, state) => const NoTransitionPage(
+          child: RegisterScreen(),
+        ),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) => AppShell(navigationShell: navigationShell),
@@ -67,7 +73,9 @@ GoRouter createAppRouter(AuthProvider authProvider) {
             routes: [
               GoRoute(
                 path: '/dashboard',
-                builder: (context, state) => const DashboardScreen(),
+                pageBuilder: (context, state) => const NoTransitionPage(
+                  child: DashboardScreen(),
+                ),
               ),
             ],
           ),
@@ -75,7 +83,9 @@ GoRouter createAppRouter(AuthProvider authProvider) {
             routes: [
               GoRoute(
                 path: '/projects',
-                builder: (context, state) => const ProjectsListScreen(),
+                pageBuilder: (context, state) => const NoTransitionPage(
+                  child: ProjectsListScreen(),
+                ),
                 routes: [
                   GoRoute(
                     path: 'create',
@@ -102,7 +112,9 @@ GoRouter createAppRouter(AuthProvider authProvider) {
             routes: [
               GoRoute(
                 path: '/chat',
-                builder: (context, state) => const ChatListScreen(),
+                pageBuilder: (context, state) => const NoTransitionPage(
+                  child: ChatListScreen(),
+                ),
                 routes: [
                   GoRoute(
                     path: ':conversationId',
@@ -118,7 +130,9 @@ GoRouter createAppRouter(AuthProvider authProvider) {
             routes: [
               GoRoute(
                 path: '/notifications',
-                builder: (context, state) => const NotificationsScreen(),
+                pageBuilder: (context, state) => const NoTransitionPage(
+                  child: NotificationsScreen(),
+                ),
               ),
             ],
           ),
@@ -126,7 +140,9 @@ GoRouter createAppRouter(AuthProvider authProvider) {
             routes: [
               GoRoute(
                 path: '/profile',
-                builder: (context, state) => const ProfileScreen(),
+                pageBuilder: (context, state) => const NoTransitionPage(
+                  child: ProfileScreen(),
+                ),
               ),
             ],
           ),
