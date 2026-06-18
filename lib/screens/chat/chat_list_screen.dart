@@ -50,7 +50,8 @@ class _ChatListScreenState extends State<ChatListScreen> {
                     padding: const EdgeInsets.only(bottom: 12),
                     child: Text(
                       provider.errorMessage!,
-                      style: TextStyle(color: Theme.of(context).colorScheme.error),
+                      style:
+                          TextStyle(color: Theme.of(context).colorScheme.error),
                     ),
                   ),
                 if (provider.conversations.isEmpty)
@@ -65,7 +66,10 @@ class _ChatListScreenState extends State<ChatListScreen> {
                   ...provider.conversations.map(
                     (conversation) => ConversationTile(
                       conversation: conversation,
-                      onTap: () => context.go('/chat/${conversation.id}'),
+                      onTap: () => context.go(
+                        '/chat/${conversation.id}',
+                        extra: conversation.title,
+                      ),
                     ),
                   ),
               ],

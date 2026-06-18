@@ -17,6 +17,7 @@ void main() {
         ApiEndpoints.conversationMessages('7'), '/api/conversas/7/mensagens');
     expect(
         ApiEndpoints.sendConversationMessage('7'), '/api/conversas/7/mensagem');
+    expect(ApiEndpoints.conversationMessage('9'), '/api/conversas/mensagem/9');
     expect(ApiEndpoints.readAllNotifications(), '/api/notificacoes/ler-todas');
     expect(ApiEndpoints.userPreferences(), '/api/usuarios/me/preferencias');
   });

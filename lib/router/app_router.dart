@@ -67,7 +67,8 @@ GoRouter createAppRouter(AuthProvider authProvider) {
         ),
       ),
       StatefulShellRoute.indexedStack(
-        builder: (context, state, navigationShell) => AppShell(navigationShell: navigationShell),
+        builder: (context, state, navigationShell) =>
+            AppShell(navigationShell: navigationShell),
         branches: [
           StatefulShellBranch(
             routes: [
@@ -93,8 +94,8 @@ GoRouter createAppRouter(AuthProvider authProvider) {
                   ),
                   GoRoute(
                     path: ':id',
-                    builder: (context, state) =>
-                        ProjectDetailScreen(projectId: state.pathParameters['id']!),
+                    builder: (context, state) => ProjectDetailScreen(
+                        projectId: state.pathParameters['id']!),
                     routes: [
                       GoRoute(
                         path: 'edit',
@@ -118,9 +119,16 @@ GoRouter createAppRouter(AuthProvider authProvider) {
                 routes: [
                   GoRoute(
                     path: ':conversationId',
-                    builder: (context, state) => ChatDetailScreen(
-                      conversationId: state.pathParameters['conversationId']!,
-                    ),
+                    builder: (context, state) {
+                      final extra = state.extra;
+                      return ChatDetailScreen(
+                        conversationId: state.pathParameters['conversationId']!,
+                        conversationTitle: extra is String ? extra : null,
+                        targetMessageId:
+                            state.uri.queryParameters['messageId'] ??
+                                state.uri.queryParameters['mensagemId'],
+                      );
+                    },
                   ),
                 ],
               ),

@@ -20,4 +20,9 @@ class NotificationService {
   Future<void> markAllAsRead() async {
     await _dio.put<dynamic>(ApiEndpoints.readAllNotifications());
   }
+
+  Future<AppNotification> markAsRead(String id) async {
+    final response = await _dio.put<dynamic>(ApiEndpoints.readNotification(id));
+    return AppNotification.fromJson(parseObjectPayload(response.data));
+  }
 }

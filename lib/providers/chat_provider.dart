@@ -64,4 +64,40 @@ class ChatProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<bool> editMessage(String messageId, String content) async {
+    final trimmed = content.trim();
+    if (messageId.isEmpty || trimmed.isEmpty) return false;
+    errorMessage = null;
+    notifyListeners();
+    try {
+      final updatedMessage = await _service.editMessage(messageId, trimmed);
+      final index = messages.indexWhere((message) => message.id == messageId);
+      if (index != -1) {
+        messages[index] = updatedMessage;
+      }
+      notifyListeners();
+      return true;
+    } catch (_) {
+      errorMessage = 'Nao foi possivel editar a mensagem.';
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> deleteMessage(String messageId) async {
+    if (messageId.isEmpty) return false;
+    errorMessage = null;
+    notifyListeners();
+    try {
+      await _service.deleteMessage(messageId);
+      messages.removeWhere((message) => message.id == messageId);
+      notifyListeners();
+      return true;
+    } catch (_) {
+      errorMessage = 'Nao foi possivel excluir a mensagem.';
+      notifyListeners();
+      return false;
+    }
+  }
 }

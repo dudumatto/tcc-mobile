@@ -30,4 +30,16 @@ class ChatService {
     );
     return Message.fromJson(parseObjectPayload(response.data));
   }
+
+  Future<Message> editMessage(String messageId, String content) async {
+    final response = await _dio.put<dynamic>(
+      ApiEndpoints.conversationMessage(messageId),
+      data: {'conteudo': content},
+    );
+    return Message.fromJson(parseObjectPayload(response.data));
+  }
+
+  Future<void> deleteMessage(String messageId) async {
+    await _dio.delete<dynamic>(ApiEndpoints.conversationMessage(messageId));
+  }
 }

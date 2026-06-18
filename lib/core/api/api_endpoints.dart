@@ -17,6 +17,8 @@ class ApiEndpoints {
       '$chatConversations/$conversationId/mensagens';
   static String sendConversationMessage(String conversationId) =>
       '$chatConversations/$conversationId/mensagem';
+  static String conversationMessage(String messageId) =>
+      '$chatConversations/mensagem/$messageId';
   static String userConversations(String userId) =>
       '$chatConversations/$userId/todas';
   static String notification(String id) => '$notifications/$id';

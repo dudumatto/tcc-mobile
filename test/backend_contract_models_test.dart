@@ -37,16 +37,38 @@ void main() {
     expect(conversation.lastMessage, 'Ola');
   });
 
+  test('Conversation troca titulo generico por nome de pessoa ou grupo', () {
+    final privateConversation = Conversation.fromJson({
+      'id': 1,
+      'titulo': 'Conversa 1',
+      'tipo': 'PRIVADA',
+      'outroUsuarioNome': 'Ana Souza',
+    });
+    final groupConversation = Conversation.fromJson({
+      'id': 2,
+      'titulo': 'Conversa 2',
+      'tipo': 'GRUPO',
+      'projetoTitulo': 'Sistema de TCC',
+    });
+
+    expect(privateConversation.title, 'Ana Souza');
+    expect(groupConversation.title, 'Sistema de TCC');
+  });
+
   test('Message aceita payload do backend em portugues', () {
     final message = Message.fromJson({
       'id': 5,
       'conteudo': 'Mensagem',
       'remetenteId': 2,
+      'remetenteNome': 'Ana Souza',
+      'editada': true,
       'dataEnvio': '2026-06-14T20:10:00Z',
     });
 
     expect(message.content, 'Mensagem');
     expect(message.senderId, '2');
+    expect(message.senderName, 'Ana Souza');
+    expect(message.isEdited, isTrue);
   });
 
   test('AppNotification aceita payload do backend em portugues', () {
@@ -56,11 +78,17 @@ void main() {
       'tipo': 'MENSAGEM_RECEBIDA',
       'lida': true,
       'dataCriacao': '2026-06-14T20:10:00',
+      'entidadeRelacionada': 'Conversa',
+      'entidadeId': 7,
+      'rotaSugerida': '/conversas/7?mensagemId=9',
     });
 
     expect(notification.description, 'Nova mensagem');
     expect(notification.type, 'MENSAGEM_RECEBIDA');
     expect(notification.isRead, isTrue);
+    expect(notification.conversationId, '7');
+    expect(notification.messageId, '9');
+    expect(notification.actionUrl, '/conversas/7?mensagemId=9');
   });
 
   test('User aceita perfil retornado pelo backend', () {

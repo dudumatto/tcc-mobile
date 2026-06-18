@@ -19,7 +19,7 @@ class NotificationProvider extends ChangeNotifier {
       notifications
         ..clear()
         ..addAll(loadedNotifications);
-      unreadCount = notifications.where((notification) => !notification.isRead).length;
+      _refreshUnreadCount();
     } catch (_) {
       errorMessage = 'Nao foi possivel carregar as notificacoes.';
     } finally {
@@ -40,5 +40,40 @@ class NotificationProvider extends ChangeNotifier {
       isLoading = false;
       notifyListeners();
     }
+  }
+
+  Future<bool> markAsRead(String id) async {
+    if (id.isEmpty) return false;
+    errorMessage = null;
+    notifyListeners();
+    try {
+      final updatedNotification = await _service.markAsRead(id);
+      final index =
+          notifications.indexWhere((notification) => notification.id == id);
+      if (index != -1) {
+        notifications[index] = updatedNotification;
+      }
+      _refreshUnreadCount();
+      notifyListeners();
+      return true;
+    } catch (_) {
+      errorMessage = 'Nao foi possivel marcar a notificacao como lida.';
+      notifyListeners();
+      return false;
+    }
+  }
+
+  void markLocallyAsRead(String id) {
+    final index =
+        notifications.indexWhere((notification) => notification.id == id);
+    if (index == -1 || notifications[index].isRead) return;
+    notifications[index] = notifications[index].copyWith(isRead: true);
+    _refreshUnreadCount();
+    notifyListeners();
+  }
+
+  void _refreshUnreadCount() {
+    unreadCount =
+        notifications.where((notification) => !notification.isRead).length;
   }
 }
