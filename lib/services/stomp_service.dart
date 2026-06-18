@@ -11,15 +11,14 @@ class StompService {
   final String wsUrl;
   final String token;
   StompClient? _client;
-  final StreamController<Map<String, dynamic>> _messagesController =
-      StreamController.broadcast();
-  final StreamController<Map<String, dynamic>> _notificationsController =
+  String? _conversationId;
+  final StreamController<Map<String, dynamic>> _eventsController =
       StreamController.broadcast();
 
-  Stream<Map<String, dynamic>> get messages => _messagesController.stream;
-  Stream<Map<String, dynamic>> get notifications => _notificationsController.stream;
+  Stream<Map<String, dynamic>> get events => _eventsController.stream;
 
-  void connect() {
+  void connectToConversation(String conversationId) {
+    _conversationId = conversationId;
     _client = StompClient(
       config: StompConfig(
         url: wsUrl,
@@ -33,19 +32,17 @@ class StompService {
   }
 
   void _onConnect(StompFrame _) {
+    final conversationId = _conversationId;
+    if (conversationId == null || conversationId.isEmpty) return;
+
     _client?.subscribe(
-      destination: '/user/queue/messages',
+      destination: '/topic/conversa/$conversationId',
       callback: (frame) {
         if (frame.body != null) {
-          _messagesController.add({'body': frame.body!});
-        }
-      },
-    );
-    _client?.subscribe(
-      destination: '/user/queue/notifications',
-      callback: (frame) {
-        if (frame.body != null) {
-          _notificationsController.add({'body': frame.body!});
+          final decoded = jsonDecode(frame.body!);
+          if (decoded is Map<String, dynamic>) {
+            _eventsController.add(decoded);
+          }
         }
       },
     );
@@ -61,7 +58,6 @@ class StompService {
 
   void dispose() {
     disconnect();
-    _messagesController.close();
-    _notificationsController.close();
+    _eventsController.close();
   }
 }
