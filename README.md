@@ -1,36 +1,136 @@
-# TCC Mobile
+<div align="center">
 
-App Flutter mobile para o CollabResearch.
+# CollabResearch Mobile
 
-## Estrutura
+**Aplicativo Flutter do sistema de gerenciamento de TCC.**
 
-- `lib/core`: API, auth, configuracao, tema e utilitarios.
-- `lib/models`: entidades de dominio.
-- `lib/services`: acesso a dados e integracoes.
-- `lib/providers`: estado global com `ChangeNotifier`.
-- `lib/screens`: telas do aplicativo.
-- `lib/widgets`: componentes reutilizaveis.
-- `test`: testes de widget iniciais.
+<p>
+  <img alt="Flutter" src="https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white">
+  <img alt="Dart" src="https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white">
+  <img alt="GoRouter" src="https://img.shields.io/badge/GoRouter-0B57D0?style=for-the-badge">
+</p>
 
-## Ambiente
+</div>
 
-- Copie `.env.example` para `.env`.
-- Defina `API_URL`.
+---
 
-## Contratos de API
+## Visao geral
 
-O mobile usa as rotas reais em portugues do backend como fonte principal. Alguns controllers do backend tambem aceitam aliases em ingles para compatibilidade com o planejamento original.
+Aplicativo mobile para consulta de dashboard, projetos, inscricoes, progresso, notificacoes, chat, perfil e configuracoes.
 
-Rotas principais usadas pelo app:
+## Objetivo
 
-- Auth: `/api/auth/login`, `/api/auth/register`, `/api/auth/logout`, `/api/auth/senha`.
-- Usuario autenticado: `/api/usuarios/me` e `/api/usuarios/me/preferencias`.
-- Perfil de usuario: `/api/usuarios/{id}`.
-- Dashboard: `/api/dashboard`, com aliases `/api/dashboard/stats` e `/api/dashboard/activity`.
-- Projetos: `/api/projetos`, com alias backend `/api/projects`.
-- Inscricoes: `/api/inscricoes`, com alias backend `/api/subscriptions`.
-- Conversas: `/api/conversas`, com alias backend `/api/chat/conversations`.
-- Mensagens: `GET /api/conversas/{id}/mensagens` e `POST /api/conversas/{id}/mensagem`.
-- Notificacoes: `/api/notificacoes`, com alias backend `/api/notifications`.
+Levar os principais fluxos do CollabResearch para celular, mantendo acesso rapido aos dados do usuario e as interacoes com o backend.
 
-Novas chamadas HTTP devem passar por `ApiClient` e por constantes ou helpers de `ApiEndpoints`.
+## Funcionalidades principais
+
+- Login, cadastro e recuperacao de acesso.
+- Dashboard com indicadores.
+- Lista e detalhe de projetos.
+- Inscricoes e acompanhamento de status.
+- Chat entre usuarios.
+- Notificacoes em tempo real.
+- Perfil, configuracoes e feedback.
+
+## Tecnologias utilizadas
+
+- Flutter
+- Dart
+- Provider
+- GoRouter
+- Dio
+- flutter_dotenv
+- flutter_secure_storage
+- stomp_dart_client
+- cached_network_image
+- fl_chart
+- intl
+
+## Estrutura do projeto
+
+```text
+tcc-mobile/
+|-- lib/
+|   |-- core/        # Configuracao, API, tema, auth e utilitarios
+|   |-- models/      # Modelos de dominio
+|   |-- providers/   # Estado global
+|   |-- router/      # Rotas do app
+|   |-- screens/     # Telas
+|   |-- services/    # Requisicoes HTTP e STOMP
+|   `-- widgets/     # Componentes reutilizaveis
+|-- android/
+|-- web/
+|-- windows/
+|-- test/
+`-- pubspec.yaml
+```
+
+## Pre-requisitos
+
+- Flutter SDK 3.3 ou superior
+- Dart compatível com o Flutter instalado
+- Android Studio, Xcode ou ambiente Flutter Web/Windows conforme a plataforma alvo
+- Backend CollabResearch em execucao
+
+## Configuracao de ambiente
+
+Crie um arquivo `.env` na raiz do mobile com a URL da API:
+
+```env
+API_URL=http://localhost:8080
+```
+
+O arquivo e lido por `flutter_dotenv`.
+
+## Instalacao
+
+```bash
+flutter pub get
+```
+
+## Como executar localmente
+
+```bash
+flutter run
+```
+
+## Como gerar build
+
+Android:
+
+```bash
+flutter build apk
+```
+
+Web:
+
+```bash
+flutter build web
+```
+
+Windows:
+
+```bash
+flutter build windows
+```
+
+## Arquitetura resumida
+
+```mermaid
+flowchart LR
+    A["App Flutter"] --> B["ApiClient / Dio"]
+    A --> C["STOMP / WebSocket"]
+    B --> D["Backend Spring Boot"]
+    C --> D
+    D --> E["Banco de dados"]
+```
+
+O mobile consome a API HTTP do backend para CRUD e autentica o usuario com JWT. Conversas e notificacoes usam o canal em tempo real quando disponivel.
+
+## Equipe do projeto
+
+Nao informada nos arquivos do repositorio.
+
+## Licenca
+
+Nao ha arquivo de licenca no repositorio.
